@@ -1,0 +1,29 @@
+Goal of topic model
+
+1) Discover Issue clusters in the corpus p(issue/word,switch=0) and the sentiment regarding these topics.
+	Issue clusters is denoted by a cluster of issue words corresponding to that issue
+	
+2) Discover What are the issues that are most frequent when the sentiment of the document is p(issue/label,d)
+	a) Happy b)Sad c)Sarcastic
+
+Application
+
+Sarcasm detection
+
+
+Generative Story.
+
+
+Generate distribution p(z/l) theta_l ~ Dirichilet(alpha1)
+Generate p(s/z,l) as shi_l ~ Dirichlet(beta1) shi_zl ~ Dirichlet(beta2*l)
+Generate p(is/w) as neta in whichever way possible //similar to Mukherjee et al
+Generate p(w/z,is=0) as phi_z ~ Dirichlet(delta1)
+Generate p(w/z,s,is=1) as xi_s ~ Dirichlet(delta2) and xi_s,z ~ Dirichlet(delta3*s) 
+
+For each tweet k :
+	l = label
+	z ~ theta_l
+	for each word w in tweet k :	
+		is ~ neta
+		if(is==0) : w ~ phi_z
+		if(is==1) : w~ xi_s,z

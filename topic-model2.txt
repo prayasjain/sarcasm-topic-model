@@ -1,0 +1,40 @@
+
+
+
+----------------------------------------Gibbs Sampling Algorithm for the topic model----------------------------------------------------
+
+for each iteration it -> 1 to burn in + samples*step_size
+	for each doc d -> 1 to D
+		l=label[d]
+		Z = topic[d]
+		Remove topic from respective counts
+		Restimate p(z/l) = Nz,l/Nl + smoothing		
+		Z = re-estimate topic from distribution and
+		Update the counts
+
+	
+		for i -> 1 to d.length
+			w= word[i][d]
+			is = switch[i][d]
+			
+			s= sentiment[i][d] // -1 if not a sentiment word
+
+			Remove the word from counts of topic or sentiment  Exact *
+			
+			is = sample from distribution over switch for words
+			if is==0 //topic word
+				sentiment[i][d]=-1 , update other respective counts **
+			
+
+			if is==1 // calculate s (new)
+				Remove
+				calculate p(s/Z,l,w) /propto p(s/Z,l) * p(w/s)
+				Re estimate
+				Update
+	if(it> burnin && (it-burn) % step ==0) // take sample
+		Update probability values (output of model)
+	if(hyperestimate)
+		Update hyper params
+	
+
+				

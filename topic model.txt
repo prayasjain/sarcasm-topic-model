@@ -1,0 +1,100 @@
+------------------------------------------Probability formulas-----------------------------------------------------------------
+//N is at document level 
+//n is at word level
+
+p(z/l,d) \propto p(l/z)*p(z/d)
+p(l/z)=	d_l_z[l][z] + smoothing
+	--------------------
+	d_z[z] + smoothing
+p(z/d) = w_z_d[z][d] + smoothing
+	----------------------
+	 w_d[d] + smoothing
+
+
+
+p(is/w,d) \propto p(w/is)*p(is/d)
+
+p(w/is)  need to be precomputed through heurestic
+p(is/d) = w_is_d[is][d] + smoothing
+	 -------------------------
+	  w_d[d] + smoothing
+
+
+p(z/Z,w) \propto p(Z/z)*p(z/w)
+p(Z/z) ?  
+p(z/w) ?
+
+
+
+p(s/Z,l,w) \propto ?
+
+
+-------------------------------------------Initialization and Variables-------------------------------------------------------------
+D = no of documents //get
+V = vocabulary length // get
+length[d] = size of each doc D //get
+label[d] = happy sad sarcastic //get
+dictionary[V] = mapping from word to numer and vice versa too //get
+word[][D] = word at ith position in each document //get
+topic[D] = topic of each document // initialize randomly
+
+t_w_d[][D] = topic of ith word in dth doc
+s_w_d[][D] = sentiment of ith word in dth doc
+
+d_l_z[l][z] = documents with label l and topic z //compute after init topic[] and label[]
+d_z[z] = documents with topic z // compute
+
+w_z_d[z][d] = no of words with topic z in dth doc // compute
+w_d[d] =no of words in dth doc //get/compute
+
+w_is_d[is][d] = no of words with switch is in doc d // compute
+
+
+
+----------------------------------------Gibbs Sampling Algorithm for the topic model----------------------------------------------------
+
+for each iteration it -> 1 to burn in + samples*step_size
+	for each doc d -> 1 to D
+	---------------------------------------------------------------------	l = label[d]
+	--------------------------For-----------------------------------	Remove the label from counts
+	----------------------Unsupervised-----------------------------------	// Re estimate p(l/d) 
+	-----------------------------------------------------------------	Estimate the label of the document
+	----------------------------------------------------------------	Update neccessary counts
+		Z = topic[d]
+		//Remove topic from respective counts
+		//Restimate p(z/l,d) /propto  p(l/z)*p(z/d)		
+		Z = re-estimate topic from distribution and
+		Update the counts
+
+	
+		for i -> 1 to d.length
+			w= word[i][d]
+			is = switch[i][d]
+			z = topic[i][d] // -1 if not a topic word
+			s= sentiment[i][d] // ditto
+			Remove the word from counts of topic or sentiment
+				Exact *
+			//Calculate p(is/w,d) /propto p(w/is)*p(is/d)
+			is = get from the new prob distro obtained in above step
+			if is==0 //topic word
+				sentiment[i][d]=-1 , update other respective counts **
+			else if is==1
+				topic[i][d] = -1 , update respective counts ***
+
+			if is==0 // calculate z (new)
+				Remove
+				calculate p(z/Z,w) /propto p(Z/z)*p(z/w)
+				Re estimate
+				Update
+			if is==1 // calculate s (new)
+				Remove
+				calculate p(s/Z,l,w) /propto ?
+				Re estimate
+				Update
+	if(it> burnin && (it-burn) % step ==0) // take sample
+		Update probability values (output of model)
+	if(hyperestimate)
+		Update hyper params
+	
+
+				
